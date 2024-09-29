@@ -66,6 +66,7 @@ jobs:
     # Start a simple HTTP server in the user folder
     - name: Start HTTP Server
       run: |
+        mkdir $HOME/Downloads
         mkdir $HOME/Downloads/devine
         cd $HOME/Downloads/devine
         python3 -m http.server 8000 &
