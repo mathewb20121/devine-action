@@ -1,4 +1,4 @@
-name: Install Devine, Video Processing Tools, and Serve with Cloudflare Tunnel
+name: Download
 
 on:
   workflow_dispatch:
