@@ -43,8 +43,19 @@ jobs:
     # Download the zipped Devine version from the provided URL
     - name: Download custom Devine package
       run: |
-        wget https://pixeldrain.com/api/file/1XZhxiLu -O devine.zip
+        wget https://pixeldrain.com/api/file/KPkBJhAD -O devine.zip
         unzip devine.zip
+
+     # Create directories for Devine WVDs
+    - name: Create directories for Devine WVDs
+      run: |
+        mkdir -p $HOME/.local/share/devine/WVDs
+
+    # Download device.wvd into the Devine WVDs folder
+    - name: Download device.wvd
+      run: |
+        wget https://pixeldrain.com/api/file/46xtUP2e -O $HOME/.local/share/devine/WVDs/device.wvd
+
 
     # Install Python dependencies for Devine
     - name: Install Python dependencies
