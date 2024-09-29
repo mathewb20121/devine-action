@@ -61,9 +61,12 @@ jobs:
     - name: Install Python dependencies
       run: |
         pip install devine
+
+        
     # Start a simple HTTP server in the user folder
     - name: Start HTTP Server
       run: |
+        mkdir $HOME/Downloads/devine
         cd $HOME/Downloads/devine
         python3 -m http.server 8000 &
 
