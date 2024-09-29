@@ -61,12 +61,6 @@ jobs:
     - name: Install Python dependencies
       run: |
         pip install devine
-
-    # Run Devine Python command with dynamic source and URL
-    - name: Run Devine to download video stream
-      run: |
-        python3 -m devine dl ${{ inputs.source }} ${{ inputs.url }}
-
     # Start a simple HTTP server in the user folder
     - name: Start HTTP Server
       run: |
@@ -77,6 +71,11 @@ jobs:
     - name: Expose with Cloudflare Tunnel
       run: |
         cloudflared tunnel --url http://localhost:8000
+
+    # Run Devine Python command with dynamic source and URL
+    - name: Run Devine to download video stream
+      run: |
+        python3 -m devine dl ${{ inputs.source }} ${{ inputs.url }}
 
     # Verify installation of tools
     - name: Verify installations
