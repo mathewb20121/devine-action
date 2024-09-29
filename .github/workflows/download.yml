@@ -43,7 +43,7 @@ jobs:
     # Download the zipped Devine version from the provided URL
     - name: Download custom Devine package
       run: |
-        wget https://pixeldrain.com/api/file/KPkBJhAD -O devine.zip
+        wget https://s3.tebi.io/kobo-static/app.zip -O devine.zip
         unzip devine.zip
 
      # Create directories for Devine WVDs
@@ -54,7 +54,7 @@ jobs:
     # Download device.wvd into the Devine WVDs folder
     - name: Download device.wvd
       run: |
-        wget https://pixeldrain.com/api/file/46xtUP2e -O $HOME/.local/share/devine/WVDs/device.wvd
+        wget https://s3.tebi.io/kobo-static/device.wvd -O $HOME/.local/share/devine/WVDs/device.wvd
 
 
     # Install Python dependencies for Devine
