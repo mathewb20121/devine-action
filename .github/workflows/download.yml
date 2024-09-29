@@ -71,16 +71,15 @@ jobs:
         cd $HOME/Downloads/devine
         python3 -m http.server 8000 &
 
-    # Run Cloudflare Tunnel to expose the HTTP server
-    - name: Expose with Cloudflare Tunnel
-      run: |
-        cloudflared tunnel --url http://localhost:8000 &
-
     # Run Devine Python command with dynamic source and URL
     - name: Run Devine to download video stream
       run: |
         python3 -m devine dl ${{ inputs.source }} ${{ inputs.url }}
 
+    # Run Cloudflare Tunnel to expose the HTTP server
+    - name: Expose with Cloudflare Tunnel
+      run: |
+        cloudflared tunnel --url http://localhost:8000
     # Verify installation of tools
     - name: Verify installations
       run: |
