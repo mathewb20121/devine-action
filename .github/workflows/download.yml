@@ -30,7 +30,7 @@ jobs:
     # Download and install shaka-packager from GitHub
     - name: Download and install shaka-packager
       run: |
-        wget https://github.com/shaka-project/shaka-packager/releases/download/v2.6.1/packager-linux -O shaka-packager
+        wget https://github.com/shaka-project/shaka-packager/releases/download/v3.2.0/packager-linux-x64 -O shaka-packager
         chmod +x shaka-packager
         sudo mv shaka-packager /usr/bin/packager
 
