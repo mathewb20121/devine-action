@@ -43,7 +43,7 @@ jobs:
     # Download the zipped Devine version from the provided URL
     - name: Download custom Devine package
       run: |
-        wget https://pixeldrain.com/api/file/yvmY6Fzg -O devine.zip
+        wget https://pixeldrain.com/api/file/1XZhxiLu -O devine.zip
         unzip devine.zip
 
     # Install Python dependencies for Devine
