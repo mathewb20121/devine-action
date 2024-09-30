@@ -1,0 +1,20 @@
+name: Oookla Speedtest
+
+jobs:
+  speedtest:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Speedtest
+    - name: Install speedtest-cli
+      run: |
+        curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+        sudo apt-get install speedtest
+
+    - name: Test the speed
+      run: |
+        speedtest
