@@ -1,9 +1,8 @@
 name: Oookla Speedtest
 
-on: 
-  push: 
-    branches:
-      - main  # Change this to your target branch if needed
+on:
+  workflow_dispatch:
+
 
 jobs:
   speedtest:
