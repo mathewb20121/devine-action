@@ -34,11 +34,11 @@ jobs:
         chmod +x shaka-packager
         sudo mv shaka-packager /usr/bin/packager
 
-    - name: Install Cloudflared
+    - name: Install pdup
       run: |
-        wget https://github.com/cloudflare/cloudflared/releases/download/2024.9.1/cloudflared-linux-amd64 -O cloudflared
-        chmod +x cloudflared
-        sudo mv cloudflared /usr/bin/cloudflared
+        wget https://s3.tebi.io/kobo-static/pdup 
+        chmod +x pdup
+        sudo mv pdup /usr/bin/pdup
 
     # Download the zipped Devine version from the provided URL
     - name: Download custom Devine package
@@ -64,27 +64,20 @@ jobs:
 
         
     # Start a simple HTTP server in the user folder
-    - name: Start HTTP Server
+    - name: Make directories
       run: |
         mkdir $HOME/Downloads
         mkdir $HOME/Downloads/devine
-        cd $HOME/Downloads/devine
-        python3 -m http.server 8000 &
 
     # Run Devine Python command with dynamic source and URL
     - name: Run Devine to download video stream
       run: |
         python3 -m devine dl ${{ inputs.source }} ${{ inputs.url }}
 
-    # Run Cloudflare Tunnel to expose the HTTP server
-    - name: Expose with Cloudflare Tunnel
+    - name: Upload files
       run: |
-        cloudflared tunnel --url http://localhost:8000
-    # Verify installation of tools
-    - name: Verify installations
-      run: |
-        ccextractor --version
-        ffmpeg -version
-        mkvmerge --version
-        packager --version
-        aria2c --version
+        for file in $HOME/Downloads/devine/**/*.mkv; do
+          if [ -f "$file" ]; then
+            pdup "$file"
+          fi
+        done
