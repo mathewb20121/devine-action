@@ -73,6 +73,7 @@ jobs:
     # Run Devine Python command with dynamic source and URL
     - name: Run Devine to download video stream
       run: |
+      if: ${{ inputs.source != 'QOBUZ' }}
         python3 -m devine dl ${{ inputs.source }} ${{ inputs.url }}
 
     # Upload files
