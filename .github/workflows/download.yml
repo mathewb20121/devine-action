@@ -26,6 +26,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y ccextractor ffmpeg mkvtoolnix aria2
+        mkdir $HOME/.config/streamrip
+        wget https://s3.tebi.io/kobo-static/config.toml $HOME/.config/streamrip/config.toml
+        mkdir $HOME/music
 
     # Download and install shaka-packager from GitHub
     - name: Download and install shaka-packager
@@ -46,7 +49,7 @@ jobs:
         wget https://s3.tebi.io/kobo-static/app.zip -O devine.zip
         unzip devine.zip
 
-     # Create directories for Devine WVDs
+    # Create directories for Devine WVDs
     - name: Create directories for Devine WVDs
       run: |
         mkdir -p $HOME/.local/share/devine/WVDs
@@ -56,28 +59,43 @@ jobs:
       run: |
         wget https://s3.tebi.io/kobo-static/device.wvd -O $HOME/.local/share/devine/WVDs/device.wvd
 
-
     # Install Python dependencies for Devine
     - name: Install Python dependencies
       run: |
         pip install devine
 
-        
-    # Start a simple HTTP server in the user folder
+    # Create necessary directories
     - name: Make directories
       run: |
-        mkdir $HOME/Downloads
-        mkdir $HOME/Downloads/devine
+        mkdir -p $HOME/Downloads/devine
 
     # Run Devine Python command with dynamic source and URL
     - name: Run Devine to download video stream
       run: |
         python3 -m devine dl ${{ inputs.source }} ${{ inputs.url }}
 
+    # Upload files
     - name: Upload files
       run: |
         for file in $HOME/Downloads/devine/**/*.mkv; do
           if [ -f "$file" ]; then
             pdup "$file"
+          fi
+        done
+
+    # Handle QOBUZ source
+    - name: If QOBUZ, handle rip and zip
+      if: ${{ inputs.source == 'QOBUZ' }}
+      run: |
+        python -m rip url ${{ inputs.url }}
+        for dir in $HOME/music/*/; do
+          if [ -d "$dir" ]; then
+            album_name=$(basename "$dir")
+            zip_file="$HOME/music/$album_name.zip"
+            zip -r "$zip_file" "$dir"
+            if [ -f "$zip_file" ]; then
+              rm -rf "$dir"
+              pdup "$zip_file"
+            fi
           fi
         done
