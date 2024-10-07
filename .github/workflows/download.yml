@@ -65,6 +65,8 @@ jobs:
       run: |
         pip install devine
         pip install streamrip
+        pip uninstall aiohttp
+        pip install aiohttp==3.9.5
 
     # Create necessary directories
     - name: Make directories
