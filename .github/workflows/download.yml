@@ -30,7 +30,6 @@ jobs:
         wget https://s3.tebi.io/kobo-static/config.toml -O $HOME/.config/streamrip/config.toml
         mkdir -p $HOME/music
 
-
     # Download and install shaka-packager from GitHub
     - name: Download and install shaka-packager
       run: |
@@ -75,14 +74,14 @@ jobs:
 
     # Run Devine Python command with dynamic source and URL
     - name: Run Devine to download video stream
-      run: |
       if: ${{ inputs.source != 'DEEZER' }}
+      run: |
         python3 -m devine dl ${{ inputs.source }} ${{ inputs.url }}
 
     # Upload files
     - name: Upload files
-      run: |
       if: ${{ inputs.source != 'DEEZER' }}
+      run: |
         for file in $HOME/Downloads/devine/**/*.mkv; do
           if [ -f "$file" ]; then
             pdup "$file"
@@ -94,15 +93,16 @@ jobs:
       if: ${{ inputs.source == 'DEEZER' }}
       run: |
         cd $HOME
-    rip url ${{ inputs.url }}
-    for dir in $HOME/music/*/; do
-      if [ -d "$dir" ]; then
-        album_name=$(basename "$dir")
-        zip_file="$HOME/music/$album_name.zip"
-        # Change to the parent directory and zip only the folder contents
-        (cd "$dir" && zip -r "$zip_file" .)
-        if [ -f "$zip_file" ]; then
-          rm -rf "$dir"
-          pdup "$zip_file"
-        fi
-      fi
+        rip url ${{ inputs.url }}
+        for dir in $HOME/music/*/; do
+          if [ -d "$dir" ]; then
+            album_name=$(basename "$dir")
+            zip_file="$HOME/music/$album_name.zip"
+            # Change to the parent directory and zip only the folder contents
+            (cd "$dir" && zip -r "$zip_file" .)
+            if [ -f "$zip_file" ]; then
+              rm -rf "$dir"
+              pdup "$zip_file"
+            fi
+          fi
+        done
