@@ -63,6 +63,7 @@ jobs:
     # Install Python dependencies for Devine
     - name: Install Python dependencies
       run: |
+        pip install streamrip
         pip install devine
 
     # Create necessary directories
