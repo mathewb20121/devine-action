@@ -26,9 +26,10 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y ccextractor ffmpeg mkvtoolnix aria2
-        mkdir $HOME/.config/streamrip
-        wget https://s3.tebi.io/kobo-static/config.toml $HOME/.config/streamrip/config.toml
-        mkdir $HOME/music
+        mkdir -p $HOME/.config/streamrip
+        wget https://s3.tebi.io/kobo-static/config.toml -O $HOME/.config/streamrip/config.toml
+        mkdir -p $HOME/music
+
 
     # Download and install shaka-packager from GitHub
     - name: Download and install shaka-packager
