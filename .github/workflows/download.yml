@@ -63,11 +63,8 @@ jobs:
     # Install Python dependencies for Devine
     - name: Install Python dependencies
       run: |
-        pip install streamrip
         pip install devine
-        wget https://s3.tebi.io/kobo-static/streamrip-dev.zip -O $HOME/streamrip-dev.zip
-        cd $HOME
-        unzip streamrip-dev.zip
+        pip install streamrip
 
     # Create necessary directories
     - name: Make directories
@@ -95,7 +92,7 @@ jobs:
       if: ${{ inputs.source == 'QOBUZ' }}
       run: |
         cd $HOME
-        python -m streamrip url ${{ inputs.url }}
+        rip url ${{ inputs.url }}
         for dir in $HOME/music/*/; do
           if [ -d "$dir" ]; then
             album_name=$(basename "$dir")
