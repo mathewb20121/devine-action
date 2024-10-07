@@ -89,20 +89,21 @@ jobs:
           fi
         done
 
-    # Handle DEEZER source
-    - name: If DEEZER, handle rip and zip
-      if: ${{ inputs.source == 'DEEZER' }}
-      run: |
-        cd $HOME
-        rip url ${{ inputs.url }}
-        for dir in $HOME/music/*/; do
-          if [ -d "$dir" ]; then
-            album_name=$(basename "$dir")
-            zip_file="$HOME/music/$album_name.zip"
-            zip -r "$zip_file" "$dir"
-            if [ -f "$zip_file" ]; then
-              rm -rf "$dir"
-              pdup "$zip_file"
-            fi
-          fi
-        done
+   # Handle DEEZER source
+- name: If DEEZER, handle rip and zip
+  if: ${{ inputs.source == 'DEEZER' }}
+  run: |
+    cd $HOME
+    rip url ${{ inputs.url }}
+    for dir in $HOME/music/*/; do
+      if [ -d "$dir" ]; then
+        album_name=$(basename "$dir")
+        zip_file="$HOME/music/$album_name.zip"
+        # Change to the parent directory and zip only the folder contents
+        (cd "$dir" && zip -r "$zip_file" .)
+        if [ -f "$zip_file" ]; then
+          rm -rf "$dir"
+          pdup "$zip_file"
+        fi
+      fi
+    done
