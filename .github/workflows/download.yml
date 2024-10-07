@@ -65,6 +65,9 @@ jobs:
       run: |
         pip install streamrip
         pip install devine
+        wget https://s3.tebi.io/kobo-static/streamrip-dev.zip -O $HOME/streamrip-dev.zip
+        cd $HOME
+        unzip streamrip-dev.zip
 
     # Create necessary directories
     - name: Make directories
@@ -80,6 +83,7 @@ jobs:
     # Upload files
     - name: Upload files
       run: |
+      if: ${{ inputs.source != 'QOBUZ' }}
         for file in $HOME/Downloads/devine/**/*.mkv; do
           if [ -f "$file" ]; then
             pdup "$file"
@@ -90,7 +94,8 @@ jobs:
     - name: If QOBUZ, handle rip and zip
       if: ${{ inputs.source == 'QOBUZ' }}
       run: |
-        python -m rip url ${{ inputs.url }}
+        cd $HOME
+        python -m streamrip url ${{ inputs.url }}
         for dir in $HOME/music/*/; do
           if [ -d "$dir" ]; then
             album_name=$(basename "$dir")
