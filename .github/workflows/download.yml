@@ -89,11 +89,11 @@ jobs:
           fi
         done
 
-   # Handle DEEZER source
-- name: If DEEZER, handle rip and zip
-  if: ${{ inputs.source == 'DEEZER' }}
-  run: |
-    cd $HOME
+    # Handle DEEZER source
+    - name: If DEEZER, handle rip and zip
+      if: ${{ inputs.source == 'DEEZER' }}
+      run: |
+        cd $HOME
     rip url ${{ inputs.url }}
     for dir in $HOME/music/*/; do
       if [ -d "$dir" ]; then
@@ -106,4 +106,3 @@ jobs:
           pdup "$zip_file"
         fi
       fi
-    done
