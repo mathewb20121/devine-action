@@ -12,10 +12,10 @@ jobs:
     steps:
     - name: Download
       run: Invoke-WebRequest https://github.com/cloudflare/cloudflared/releases/download/2024.10.0/cloudflared-windows-amd64.exe -OutFile cloudflared.exe
-    - name: Tunnel
-      run: .\cloudflared tunnel --url localhost:3389
     - name: Enable TS
       run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
     - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
     - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
     - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "matty6448?!!" -Force)
+    - name: Tunnel
+      run: .\cloudflared tunnel --url localhost:3389
