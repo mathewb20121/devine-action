@@ -1,28 +1,22 @@
-name: Windows 10
+name: Windows - LiteManager
 
-on: [push, workflow_dispatch]
+on:
+  workflow_dispatch:
 
 jobs:
   build:
+    name: Start Building...
     runs-on: windows-latest
     timeout-minutes: 9999
-
+    
     steps:
-    - name: Download Chrome
-      run: Invoke-WebRequest https://dl.google.com/chrome/install/latest/chrome_installer.exe -OutFile chrome_installer.exe
-    - name: Install Chrome
-      run: .\chrome_installer.exe /silent /install
+      - name: Downloading & Installing Essentials
+        run: |
+          Invoke-WebRequest -Uri "https://gitlab.com/chamod12/lm_win-10_github_rdp/-/raw/main/Downloads.bat" -OutFile "Downloads.bat"
+          cmd /c Downloads.bat
 
-    - name: Download Chrome Remote Desktop Host
-      run: Invoke-WebRequest https://dl.google.com/edgedl/chrome-remote-desktop/chromeremotedesktophost.msi -OutFile chrome-remote-desktop.msi
-    - name: Install Chrome Remote Desktop Host
-      run: msiexec /i chrome-remote-desktop.msi /qn
+      - name: Connect to LiteManager
+        run: cmd /c show.bat
 
-    - name: Configure Google Remote Desktop
-      run: |
-        $Code = "4/0AVG7fiRmbJ3be2vWe94EKEFLJ-_cdNCKH39aUtf0GSkhLOiEEUxYuxaYYXa84ZWQVnf2xw"
-        $Name = "WindowsVM"
-        Start-Process "chrome-remote-desktop" -ArgumentList "--code=$Code --name=$Name"
-
-    - name: Set Password
-      run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "matty6448?!!" -Force)
+      - name: Time Counter
+        run: cmd /c loop.bat
