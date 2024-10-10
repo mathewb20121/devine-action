@@ -4,18 +4,25 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-
     runs-on: windows-latest
     timeout-minutes: 9999
 
-
     steps:
-    - name: Download
-      run: Invoke-WebRequest https://github.com/cloudflare/cloudflared/releases/download/2024.10.0/cloudflared-windows-amd64.exe -OutFile cloudflared.exe
-    - name: Enable TS
-      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
-    - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-    - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
-    - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "matty6448?!!" -Force)
-    - name: Tunnel
-      run: .\cloudflared tunnel --url localhost:3389
+    - name: Download Chrome
+      run: Invoke-WebRequest https://dl.google.com/chrome/install/latest/chrome_installer.exe -OutFile chrome_installer.exe
+    - name: Install Chrome
+      run: .\chrome_installer.exe /silent /install
+
+    - name: Download Chrome Remote Desktop Host
+      run: Invoke-WebRequest https://dl.google.com/linux/direct/chrome-remote-desktop_current_amd64.deb -OutFile chrome-remote-desktop.msi
+    - name: Install Chrome Remote Desktop Host
+      run: msiexec /i chrome-remote-desktop.msi /qn
+
+    - name: Configure Google Remote Desktop
+      run: |
+        $Code = "4/0AVG7fiRmbJ3be2vWe94EKEFLJ-_cdNCKH39aUtf0GSkhLOiEEUxYuxaYYXa84ZWQVnf2xw"
+        $Name = "WindowsVM"
+        Start-Process "chrome-remote-desktop" -ArgumentList "--code=$Code --name=$Name"
+
+    - name: Set Password
+      run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "matty6448?!!" -Force)
